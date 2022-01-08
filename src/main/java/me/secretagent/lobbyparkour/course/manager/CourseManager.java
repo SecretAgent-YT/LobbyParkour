@@ -3,6 +3,7 @@ package me.secretagent.lobbyparkour.course.manager;
 import me.secretagent.lobbyparkour.LobbyParkour;
 import me.secretagent.lobbyparkour.course.Course;
 import me.secretagent.lobbyparkour.course.attempt.CourseAttempt;
+import me.secretagent.lobbyparkour.util.ChatUtil;
 import me.secretagent.lobbyparkour.vector.Vector;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -39,7 +40,8 @@ public class CourseManager implements Listener {
         if (courseAttempts.stream().noneMatch(courseAttempt -> courseAttempt.getPlayerUUID().equals(uuid))) {
             for (Course course : courses) {
                 if (vector.equals(course.getCheckPoints().get(0))) {
-                    player.sendMessage(ChatColor.GREEN + "You started " + course.getName() + "!");
+                    player.sendMessage(ChatUtil.format(plugin.getConfig().getString("start-message"))
+                            .replace("%coursename%", course.getName()));
                     courseAttempts.add(new CourseAttempt(uuid, course, System.currentTimeMillis()));
                 }
             }
@@ -52,11 +54,15 @@ public class CourseManager implements Listener {
             Course course = attempt.getCourse();
             if (vector.equals(course.getCheckPoints().get(course.getCheckPoints().size() - 1)) && attempt.getCheckpoint() == course.getCheckPoints().size() - 1) {
                 attempt.setEndTime(System.currentTimeMillis());
-                player.sendMessage(ChatColor.GREEN + "You completed " + course.getName() + " in "+ ChatColor.YELLOW + attempt.getLengthString() + ChatColor.GREEN + "!");
+                player.sendMessage(ChatUtil.format(plugin.getConfig().getString("end-message"))
+                        .replace("%time%", String.valueOf(attempt.getLengthString()))
+                        .replace("%coursename%", course.getName()));
                 plugin.getStorage().saveCourseAttempt(attempt);
                 courseAttempts.remove(attempt);
-            } else if (vector.equals(course.getCheckPoints().get(getCourseAttempt(uuid).getCheckpoint()))) {
-                player.sendMessage(ChatColor.GREEN + "You completed checkpoint " + getCourseAttempt(uuid).getCheckpoint() + "!");
+            } else if (vector.equals(course.getCheckPoints().get(attempt.getCheckpoint()))) {
+                player.sendMessage(ChatUtil.format(plugin.getConfig().getString("checkpoint-message"))
+                        .replace("%checkpoint%", String.valueOf(attempt.getCheckpoint()))
+                        .replace("%coursename%", course.getName()));
                 getCourseAttempt(uuid).addCheckpoint();
             }
         }

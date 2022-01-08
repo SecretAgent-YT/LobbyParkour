@@ -27,7 +27,7 @@ public final class LobbyParkour extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!getDataFolder().exists()) getDataFolder().mkdir();
+        saveDefaultConfig();
         if (!CHECKPOINTS.exists()) {
             try {
                 CHECKPOINTS.createNewFile();

@@ -1,0 +1,6 @@
+# %checkpoint%, %coursename%
+checkpoint-message: '&aYou completed checkpoint %checkpoint% of %coursename%!'
+# %coursename%
+start-message: '&aYou started %coursename%!'
+# %coursename%, %time%
+end-message: '&aYou finished %coursename% in &e%time%&a!'
