@@ -1,0 +1,6 @@
+name: LobbyParkour
+version: '${project.version}'
+main: me.secretagent.lobbyparkour.LobbyParkour
+api-version: 1.17
+softdepend: [ WorldGuard ]
+authors: [ SecretAgent ]
